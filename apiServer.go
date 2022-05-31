@@ -42,6 +42,31 @@ func returnAllEmployees(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func returnPublicTasks(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("/employees was called! apiServer.go:19 returnAllEmployees")
+	db := OpenConnection()
+
+	rows, err := db.Query("SELECT * FROM tasks")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var tasks []Task
+	for rows.Next() {
+		var task Task
+		rows.Scan(&task.Unitid, &task.Taskid, &task.Assignedto, &task.Title, &task.Privacy)
+		tasks = append(tasks, task)
+	}
+	empBytes, _ := json.MarshalIndent(tasks, "", "\t")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(empBytes)
+
+	defer rows.Close()
+	defer db.Close()
+
+}
+
 func returnSingleArticle(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["empid"]
@@ -122,6 +147,33 @@ func returnSingleTask(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func returnPairedTask(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Println("/employees was called! apiServer.go:152 returnPairedTask")
+	db := OpenConnection()
+
+	rows, err := db.Query("SELECT * FROM tasks inner join employees on empid=any(assignedto)")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	var whom []Whois
+	for rows.Next() {
+		var whois Whois
+		rows.Scan(&whois.Uniqid, &whois.Empid, &whois.Fname, &whois.Lname, &whois.Unitid, &whois.Taskid, &whois.Assignedto, &whois.Title, &whois.Privacy)
+		whom = append(whom, whois)
+	}
+
+	empBytes, _ := json.MarshalIndent(whom, "", "\t")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(empBytes)
+
+	//defer rows.Close()
+	defer db.Close()
+
+}
+
 // using gorilla mux to normalize endpoint urls
 func handleRequests() {
 	// these are the api endpoints
@@ -144,7 +196,9 @@ func handleRequests() {
 	myRouter.HandleFunc("/employees", returnAllEmployees)
 	myRouter.HandleFunc("/employees/uuid/{uniqid}", returnSingleByUUID)
 	myRouter.HandleFunc("/employees/empid/{empid}", returnSingleArticle)
+	myRouter.HandleFunc("/tasks", returnPublicTasks)
 	myRouter.HandleFunc("/tasks/name/{title}", returnSingleTask)
+	myRouter.HandleFunc("/whois", returnPairedTask)
 
 	//myRouter.HandleFunc("/article", createNewArticle).Methods("POST")
 	//myRouter.HandleFunc("/article/{id}", deleteArticle).Methods("DELETE")

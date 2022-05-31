@@ -26,16 +26,15 @@ type Task struct {
 }
 
 type Whois struct {
-	Unitid     string `json:"GUID"`
-	Taskid     string `json:"Task ID"`
-	Assignedto string `json:"Assigned To"`
-	Title      string `json:"Title"`
-	Privacy    string `json:"Privacy"`
-
-	Uniqid string `json:"UUID"`
-	Empid  string `json:"Employee ID"`
-	Fname  string `json:"First Name"`
-	Lname  string `json:"Last Name"`
+	Uniqid     string //`json:"Task UUID"`
+	Empid      string //`json:"Employee UUID"`
+	Fname      string //`json:"Task ID"`
+	Lname      string //`json:"Assigned To"`
+	Unitid     string //`json:"Title"`
+	Taskid     string //`json:"Privacy"`
+	Assignedto string //`json:"Employee ID"`
+	Title      string //`json:"First Name"`
+	Privacy    string //`json:"Last Name"`
 }
 
 type Message struct {
