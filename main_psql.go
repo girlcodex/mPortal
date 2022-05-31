@@ -36,7 +36,7 @@ func EMP(w http.ResponseWriter, r *http.Request) {
 
 	for rows.Next() {
 		var employee Employee
-		rows.Scan(&employee.uniqid, &employee.empid, &employee.fname, &employee.lname)
+		rows.Scan(&employee.Uniqid, &employee.Empid, &employee.Fname, &employee.Lname)
 		employees = append(employees, employee)
 	}
 
@@ -61,7 +61,7 @@ func TAS(w http.ResponseWriter, r *http.Request) {
 
 	for rows.Next() {
 		var task Task
-		rows.Scan(&task.unitid, &task.taskid, &task.assignedto, &task.title, &task.privacy)
+		rows.Scan(&task.Unitid, &task.Taskid, &task.Assignedto, &task.Title, &task.Privacy)
 		todos = append(todos, task)
 	}
 
@@ -84,7 +84,7 @@ func WHO(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement := `SELECT * FROM employees INNER JOIN tasks ON empid=ANY(assignedto) WHERE title IN ($1)`
-	rows, err := db.Query(sqlStatement, e.title)
+	rows, err := db.Query(sqlStatement, e.Title)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,7 +93,7 @@ func WHO(w http.ResponseWriter, r *http.Request) {
 
 	for rows.Next() {
 		var whois Whois
-		rows.Scan(&whois.uniqid, &whois.empid, &whois.fname, &whois.lname, &whois.unitid, &whois.taskid, &whois.assignedto, &whois.title, &whois.privacy)
+		rows.Scan(&whois.Uniqid, &whois.Empid, &whois.Fname, &whois.Lname, &whois.Unitid, &whois.Taskid, &whois.Assignedto, &whois.Title, &whois.Privacy)
 		assigned = append(assigned, whois)
 	}
 
@@ -117,7 +117,7 @@ func empPOST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement := `INSERT INTO employees (empid, fname, lname) VALUES ($1, $2,$3)`
-	_, err = db.Exec(sqlStatement, e.empid, e.fname, e.lname)
+	_, err = db.Exec(sqlStatement, e.Empid, e.Fname, e.Lname)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		panic(err)
@@ -138,7 +138,7 @@ func tasPOST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sqlStatement := `INSERT INTO tasks (assignedto, title, privacy) VALUES ($1, $2,$3)`
-	_, err = db.Exec(sqlStatement, t.assignedto, t.title, t.privacy)
+	_, err = db.Exec(sqlStatement, t.Assignedto, t.Title, t.Privacy)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		panic(err)

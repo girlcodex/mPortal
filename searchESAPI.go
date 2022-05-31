@@ -70,6 +70,8 @@ func searchESAPI() {
 
 				// If no error, then convert response to a map[string]interface
 			} else {
+				//!!todo!
+				fmt.Println("ERROR HERE:", mapResp, "\n")
 
 				fmt.Println("mapResp TYPE:", reflect.TypeOf(mapResp), "\n")
 
