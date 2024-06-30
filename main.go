@@ -63,8 +63,8 @@ var (
 	ctx = context.Background()
 	//
 	cfg = elasticsearch.Config{
-		CloudID: "cointest:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvJDcxY2I3N2ZkYTUwZDQxMjQ4YWQzNDlkMTFjMzAyZmEzJGYyNTQwMmJiNTdkMzQ0NTg5NmY2NmM0MTY3MDE2YTJj",
-		APIKey:  "emR5ekI0RUJKUlZnRGc2QURHX286bFVYSnBoZXVUd3Fqel9pek5aQnplQQ==",
+		CloudID: "",
+		APIKey:  "",
 	}
 	//
 	fieldName  = "title" // static test input for searchESAPI.go
